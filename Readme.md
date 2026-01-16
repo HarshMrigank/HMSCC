@@ -1,119 +1,114 @@
- 🧠 HMSCC — Harsh Mrigank’s Simple C Compiler
+# 🧠 HMSCC — Harsh Mrigank’s Simple C Compiler
 
-A **from-scratch educational compiler project** that demonstrates how a C-like language is designed, analyzed, executed, and exposed as a backend service — from **lexical analysis to executable output**, with a **web interface planned next**.
+HMSCC is a **from-scratch compiler system** designed as a serious **final-year engineering project**, demonstrating both **compiler internals** and **real-world system integration**.
 
-HMSCC is intentionally minimal, readable, and modular, making it ideal for **academic evaluation, viva explanations, and portfolio showcase**.
+The project intentionally prioritizes **correctness, clarity, and architectural separation** over gimmicks or over-engineering.
 
 ---
 
 ## 📌 Project Overview
 
-**HMSCC (Harsh Mrigank’s Simple C Compiler)** is a custom-built compiler that supports a subset of the C language. The project focuses on *understanding compiler internals and real-world compiler integration* rather than relying on existing compiler frameworks.
+**HMSCC (Harsh Mrigank’s Simple C Compiler)** is a custom-built compiler for a C-like language. The system covers the *entire compilation pipeline* — from lexical analysis to executable output — and exposes the compiler safely through a **backend API** and **web-based interface**.
 
-The system now consists of:
-- A **native C++ compiler**
-- A **Node.js backend service** that executes the compiler
-- A planned **web-based frontend**
-
-> 🎯 The primary goal is to demonstrate **deep understanding of compiler design and system integration**, not to compete with GCC/Clang.
+> 🎯 The goal is to demonstrate *deep understanding of compiler design and deployment*, not to compete with GCC/Clang.
 
 ---
 
 ## ✨ Key Features (Current)
 
-### Compiler (C++)
-* ✅ Custom **Lexer (Tokenizer)**
-* ✅ Recursive-Descent **Parser**
-* ✅ **AST (Abstract Syntax Tree)** generation
-* ✅ **Semantic Analysis** with symbol table & type checking
-* ✅ **Code Generation** (HMSCC → C → Executable)
-* ✅ Control flow support: `if / else`, `while`
+### 🔹 Compiler (C++)
+
+* ✅ Custom **Lexer** (Tokenizer)
+* ✅ Recursive-descent **Parser**
+* ✅ **AST (Abstract Syntax Tree)** construction
+* ✅ **Semantic Analysis** (symbol table, scope, type checks)
+* ✅ **Code Generation** (HMSCC → C)
+* ✅ Control flow: `if / else`, `while`
 * ✅ Data types: `int`, `string`
 * ✅ Relational operators: `< > <= >= == !=`
-* ✅ Proper error handling (syntax & semantic)
+* ✅ Robust syntax & semantic error reporting
 
-### Backend (Node.js)
-* ✅ HMSCC compiled as a standalone binary
-* ✅ Compiler executed via backend API
-* ✅ Program output, errors, and generated C code returned as JSON
-* ✅ Execution sandboxed to a temp directory
-* ✅ Timeout-based safety for infinite loops
+### 🔹 Backend (Node.js)
+
+* ✅ HMSCC compiled as a **standalone native binary**
+* ✅ Compiler executed via **Node.js backend**
+* ✅ `/compile` API returns:
+
+  * Program output (stdout)
+  * Compiler/runtime errors (stderr)
+  * Generated C code
+* ✅ Execution sandboxed using temporary directories
+* ✅ Timeout-based protection against infinite loops
+* ✅ Stateless, backend-first architecture
+
+### 🔹 Frontend (Phase 8)
+
+* ✅ Clean web-based interface
+* ✅ Browser editor for HMSCC source code
+* ✅ Compile & run via backend API
+* ✅ Displays output, errors, and generated C code
+* ✅ Strict separation from compiler logic
 
 ---
 
 ## 🗂️ Project Structure
 
+```
 HMSCC/
-├── compiler/ # Core compiler (C++)
-│ ├── main.cpp
-│ ├── lexer/
-│ ├── parser/
-│ ├── ast/
-│ ├── semantic/
-│ └── codegen/
-├── build/ # CMake build output (binary)
-│ └── hmscc.exe
-├── backend/ # Node.js backend (Phase 7)
-│ ├── server.js
-│ ├── routes/
-│ ├── services/
-│ └── temp/
+├── compiler/           # Core compiler (C++)
+│   ├── lexer/
+│   ├── parser/
+│   ├── ast/
+│   ├── semantic/
+│   └── codegen/
+├── build/              # CMake build output
+│   └── hmscc.exe
+├── backend/            # Node.js backend
+│   ├── routes/
+│   ├── services/
+│   ├── temp/
+│   └── server.js
+├── frontend/           # Web interface (Phase 8)
+│   └── src/
 ├── CMakeLists.txt
 └── README.md
-
-yaml
-Copy code
+```
 
 ---
 
-## 🛠️ Tech Stack Used
+## 🔄 End-to-End Program Flow
 
-### Core Compiler
-* **C++17**
-* **CMake** — Build system
-* **GCC / MinGW** — Backend compilation
-
-### Backend
-* **Node.js**
-* **Express.js**
-* **child_process** for compiler execution
-
-### Planned
-* **HTML / CSS / JavaScript / React** — Web UI
-* **Docker** — Secure sandboxed execution
-
----
-
-## 🔄 Program Flow
-
-HMSCC Source Code (.hc)
-↓
-Lexer → Parser → AST
-↓
-Semantic Analysis
-↓
+```
+HMSCC Source Code (Browser)
+        ↓
+Frontend UI
+        ↓ HTTP (JSON)
+Node.js Backend
+        ↓ exec()
+HMSCC Compiler Binary
+        ↓
+Lexer → Parser → AST → Semantic Analysis
+        ↓
 C Code Generation
-↓
-GCC Compilation
-↓
-Executable Output
-↓
-Node.js Backend API
-↓
-(JSON response)
-
-yaml
-Copy code
+        ↓
+System Compiler (GCC / MinGW)
+        ↓
+Executable Execution
+        ↓
+Program Output
+```
 
 ---
 
 ## 🧩 Supported Language Subset (HMSCC)
 
 ### Data Types
+
 * `int`
 * `string`
 
-### Statements
+### Statements & Features
+
 * Variable declaration & assignment
 * `print()`
 * `if / else`
@@ -124,48 +119,95 @@ Copy code
 
 ## 🚧 Development Phases
 
-### ✅ Phase 0–6 — Compiler Frontend & Backend
-* Complete compiler pipeline implemented
-* Lexer → Parser → AST → Semantic → Codegen
-* Control flow, expressions, and strings stabilized
+### ✅ Phase 0–6 — Compiler Core (COMPLETED)
+
+* Lexer, Parser, AST, Semantic Analysis
+* Code generation to valid C
+* Control flow and expression handling
+* Stable compiler internals
+
+---
 
 ### ✅ Phase 7 — Backend Integration (COMPLETED)
-* HMSCC compiled into a standalone binary
-* Node.js backend executes the compiler
-* Structured JSON response:
-  - Program output
-  - Compiler/runtime errors
-  - Generated C code
-* Execution sandboxed with timeouts
 
-### 🔄 Phase 8 — Web-Based Interface (NEXT)
-* Browser-based code editor
-* Run HMSCC from UI
-* Display output, errors, and generated C code
+* HMSCC built using **CMake**
+* Compiler executed as an external binary
+* Node.js backend orchestrates compilation
+* Secure execution using temp directories
+* Structured JSON response
 
-### 🔄 Phase 9 — Language Personalization (Planned)
-* Custom keywords and operators
-* Syntax mode switching
-* Demonstrates compiler independence from surface syntax
+---
+
+### ✅ Phase 8 — Web-Based Interface (COMPLETED)
+
+* Browser-based editor
+* Compile & run via backend API
+* Output, errors, and generated C displayed
+* Frontend treated as a **pure consumer**
+
+---
+
+### 🔄 Phase 9 — Web Deployment & Hosting (NEXT)
+
+* Deploy frontend and backend
+* Production-ready configuration
+* Environment-based paths
+* Secure public access
+
+---
+
+### 🔄 Phase 10 — Editor Improvements
+
+* Better writing experience
+* Line numbers
+* Improved layout & usability
+* Error visibility enhancements
+
+---
+
+### 🔄 Phase 11 — Navigation, Help & Documentation
+
+* Navigation bar
+* About section
+* Help section explaining language usage
+* Documentation for **custom language semantics**
+
+---
+
+### 🔄 Phase 12 — Language Customization
+
+* Replace standard C keywords
+* Introduce personalized syntax
+* Demonstrate compiler independence from surface syntax
+
+---
+
+### 🔄 Phase 13 — Visual Identity & Final Polish
+
+* Custom theme & styling
+* Personal design language
+* UI/UX refinement
+* Final production-ready release
 
 ---
 
 ## 🎓 Academic Value
 
-This project demonstrates:
-* Strong understanding of compiler architecture
-* Real-world compiler execution via backend service
-* Build system usage (CMake)
-* Safe execution and error handling
-* Scalable design suitable for web integration
+HMSCC demonstrates:
 
-> HMSCC is designed to be **viva-friendly, extensible, and portfolio-ready**.
+* Complete compiler pipeline understanding
+* Native compiler execution via backend services
+* Secure system-level orchestration
+* Web-based exposure of low-level tools
+* Strong separation of concerns
+
+> HMSCC is **viva-friendly, defensible, and portfolio-ready**.
 
 ---
 
 ## 👤 Author
 
-**Harsh Mrigank**  
+**Harsh Mrigank**
 B.Tech — Computer Science / Engineering
 
 ---

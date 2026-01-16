@@ -14,7 +14,11 @@ router.post('/', async (req, res) => {
 
   try {
     const result = await runCompiler(code);
-    res.json(result);
+    res.json({
+      stdout: result.output || '',
+      stderr: result.errors || '',
+      generatedC: result.generatedC || result.cCode || ''
+    });
   } catch (err) {
     res.status(500).json({
       success: false,

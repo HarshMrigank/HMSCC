@@ -1,32 +1,39 @@
-# ===== Build artifacts =====
+# =========================
+# Node / Frontend
+# =========================
+node_modules/
+dist/
 build/
-*.exe
-*.out
-*.o
-*.obj
 
-# ===== Generated compiler output =====
-output.c
+# Vite / React
+frontend/node_modules/
+frontend/dist/
+
+# =========================
+# Backend temp & runtime
+# =========================
 backend/temp/
-compiler/output.c
+backend/*.log
 
-# ===== Node.js =====
-backend/node_modules/
-npm-debug.log*
-yarn.lock
-
-# ===== CMake =====
+# =========================
+# Compiler build artifacts
+# =========================
+build/
 CMakeFiles/
 CMakeCache.txt
 cmake_install.cmake
-*.ninja
-*.log
+Makefile
+*.exe
 
-# ===== OS / Editor =====
+# =========================
+# OS / Editor noise
+# =========================
 .DS_Store
 Thumbs.db
 .vscode/
 .idea/
 
-# ===== Environment =====
+# =========================
+# Env files
+# =========================
 .env
