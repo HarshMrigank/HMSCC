@@ -1,0 +1,32 @@
+# ===== Build artifacts =====
+build/
+*.exe
+*.out
+*.o
+*.obj
+
+# ===== Generated compiler output =====
+output.c
+backend/temp/
+compiler/output.c
+
+# ===== Node.js =====
+backend/node_modules/
+npm-debug.log*
+yarn.lock
+
+# ===== CMake =====
+CMakeFiles/
+CMakeCache.txt
+cmake_install.cmake
+*.ninja
+*.log
+
+# ===== OS / Editor =====
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+
+# ===== Environment =====
+.env
