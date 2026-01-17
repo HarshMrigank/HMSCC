@@ -1,0 +1,8 @@
+node_modules
+backend/node_modules
+compiler/build
+compiler/build-windows
+compiler/build-linux
+.git
+.gitignore
+.env
