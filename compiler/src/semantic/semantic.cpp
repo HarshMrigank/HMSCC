@@ -1,4 +1,4 @@
-#include "semantic.hpp"
+#include "semantic/semantic.hpp"
 #include <stdexcept>
 
 // Entry point

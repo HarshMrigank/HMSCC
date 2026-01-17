@@ -5,7 +5,6 @@ node_modules/
 dist/
 build/
 
-# Vite / React
 frontend/node_modules/
 frontend/dist/
 
@@ -18,12 +17,21 @@ backend/*.log
 # =========================
 # Compiler build artifacts
 # =========================
-build/
+compiler/build-windows/
+compiler/build-linux/
+
 CMakeFiles/
 CMakeCache.txt
 cmake_install.cmake
 Makefile
+
 *.exe
+*.o
+*.obj
+
+# Generated compiler outputs
+output.c
+output.exe
 
 # =========================
 # OS / Editor noise
