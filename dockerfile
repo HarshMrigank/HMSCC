@@ -1,55 +1,39 @@
-# =========================
-# Base image with build tools
-# =========================
-FROM ubuntu:22.04
+# ===============================
+# Stage 1: Build compiler (C++)
+# ===============================
+FROM ubuntu:22.04 AS compiler
 
-# Avoid interactive prompts
 ENV DEBIAN_FRONTEND=noninteractive
 
-# =========================
-# Install system dependencies
-# =========================
 RUN apt-get update && apt-get install -y \
     build-essential \
     cmake \
     gcc \
-    nodejs \
-    npm \
     && rm -rf /var/lib/apt/lists/*
 
-# =========================
-# Set working directory
-# =========================
+WORKDIR /compiler
+COPY compiler ./compiler
+
+RUN mkdir -p compiler/build && \
+    cd compiler/build && \
+    cmake .. && \
+    make
+
+# ===============================
+# Stage 2: Node backend (Node 18)
+# ===============================
+FROM node:18-bullseye
+
 WORKDIR /app
 
-# =========================
-# Copy entire project
-# =========================
-COPY . .
+# Copy compiler binary
+COPY --from=compiler /compiler/compiler/build/hmscc /app/compiler/hmscc
 
-# =========================
-# Build HMSCC compiler
-# =========================
-WORKDIR /app/compiler
+# Copy backend
+COPY backend ./backend
 
-RUN mkdir -p build && \
-    cd build && \
-    cmake .. && \
-    make && \
-    chmod +x hmscc
-
-# =========================
-# Install backend dependencies
-# =========================
 WORKDIR /app/backend
 RUN npm install
 
-# =========================
-# Expose backend port
-# =========================
 EXPOSE 3000
-
-# =========================
-# Start backend server
-# =========================
 CMD ["node", "server.js"]
