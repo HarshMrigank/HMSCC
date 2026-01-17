@@ -3,11 +3,11 @@ const cors = require('cors');
 const compileRoute = require('./routes/compile');
 
 const app = express();
-const PORT = 3000;
+const PORT = process.env.PORT || 3000;
 
-// ✅ CORS MUST COME FIRST
+// ✅ CORS (safe for now, tighten later)
 app.use(cors({
-  origin: 'http://localhost:5173',
+  origin: '*',
   methods: ['GET', 'POST', 'OPTIONS'],
   allowedHeaders: ['Content-Type']
 }));

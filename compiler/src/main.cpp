@@ -14,13 +14,18 @@ int main(int argc, char* argv[]) {
     }
 
     std::ifstream file(argv[1]);
+    if (!file.is_open()) {
+        std::cerr << "Failed to open file: " << argv[1] << "\n";
+        return 1;
+    }
+
     std::stringstream buffer;
     buffer << file.rdbuf();
 
-    Lexer lexer(buffer.str());
-    auto tokens = lexer.tokenize();
-
     try {
+        Lexer lexer(buffer.str());
+        auto tokens = lexer.tokenize();
+
         Parser parser(tokens);
         auto ast = parser.parse();
 
@@ -34,10 +39,18 @@ int main(int argc, char* argv[]) {
         out << cCode;
         out.close();
 
+#ifdef _WIN32
         system("gcc output.c -o output.exe");
         system("output.exe");
+#else
+        system("gcc output.c -o output");
+        system("./output");
+#endif
 
     } catch (const std::exception& e) {
         std::cerr << e.what() << "\n";
+        return 1;
     }
+
+    return 0;
 }
