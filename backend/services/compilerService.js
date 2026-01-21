@@ -59,12 +59,12 @@ async function runCompiler(code) {
 
   const generatedC = fs.readFileSync(outputCPath, 'utf-8');
 
-  return {
+  res.json({
     success: true,
-    output: stdout,
-    errors: '',
-    generated_c: generatedC
-  };
+    stdout: result.output ?? '',
+    stderr: result.errors ?? '',
+    generatedC: result.generated_c ?? ''
+  });
 }
 
 module.exports = { runCompiler };

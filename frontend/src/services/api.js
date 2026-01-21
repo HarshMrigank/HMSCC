@@ -1,5 +1,5 @@
 export async function compileCode(code) {
-  const response = await fetch('http://localhost:3000/compile', {
+  const response = await fetch('https://hmscc-backend.onrender.com/compile', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json'
