@@ -1,15 +1,18 @@
 const express = require('express');
-const cors = require('cors');
 const compileRoute = require('./routes/compile');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
+const cors = require('cors');
 
-// ✅ SINGLE CORS CONFIG — nothing else
+// Allow CORS for frontend dev and production
 app.use(cors({
-  origin: '*',
-  methods: ['GET', 'POST'],
-  allowedHeaders: ['Content-Type']
+  origin: [
+    'http://localhost:5173',
+    'https://hmscc-frontend.onrender.com', // adjust if frontend is deployed elsewhere
+  ],
+  methods: ['POST', 'OPTIONS'],
+  allowedHeaders: ['Content-Type'],
 }));
 
 app.use(express.json());

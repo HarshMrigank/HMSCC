@@ -1,24 +1,24 @@
 const express = require('express');
-const router = express.Router();
 const { runCompiler } = require('../services/compilerService');
+const router = express.Router();
 
-router.post('/', async (req, res) => {
+// POST /compile
+router.post('/', (req, res) => {
   const { code } = req.body;
-
-  if (!code) {
-    return res.status(400).json({ error: 'No code provided' });
+  if (typeof code !== 'string') {
+    return res.status(400).json({ error: 'Missing code' });
   }
-
-  try {
-    const result = await runCompiler(code);
-    res.json({
-      stdout: result.output,
-      stderr: result.errors,
-      generatedC: result.generated_c
+  runCompiler(code)
+    .then(result => {
+      res.json({
+        stdout: result.output || result.stdout || '',
+        stderr: result.errors || result.stderr || '',
+        generatedC: result.generated_c || result.generatedC || ''
+      });
+    })
+    .catch(err => {
+      res.status(500).json({ error: err.message });
     });
-  } catch (err) {
-    res.status(500).json({ error: err.message });
-  }
 });
 
 module.exports = router;
