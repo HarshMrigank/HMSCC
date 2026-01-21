@@ -5,15 +5,12 @@ const compileRoute = require('./routes/compile');
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-// ✅ CORS must be FIRST
+// ✅ Correct CORS setup (NO app.options)
 app.use(cors({
   origin: '*',
   methods: ['GET', 'POST', 'OPTIONS'],
   allowedHeaders: ['Content-Type']
 }));
-
-// ✅ THIS LINE IS MISSING (CRITICAL)
-app.options('*', cors());
 
 app.use(express.json());
 
