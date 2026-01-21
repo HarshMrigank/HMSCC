@@ -147,12 +147,23 @@ Program Output
 
 ---
 
-### 🔄 Phase 9 — Web Deployment & Hosting (NEXT)
+### 🔄 Phase 9 — Web Deployment & Hosting (IN PROGRESS)
 
-* Deploy frontend and backend
-* Production-ready configuration
-* Environment-based paths
-* Secure public access
+**Phase 9 is being executed in parts.**
+
+#### ✅ Phase 9.1 — Backend Deployment (COMPLETED)
+* Backend deployed to production environment
+* HMSCC compiler binary integrated on server
+* Environment-based configuration for paths and execution
+* API tested via public endpoint
+* Secure execution preserved (timeouts, temp directories)
+
+#### ⏳ Phase 9.2 — Frontend Deployment (NEXT)
+* Deploy frontend build
+* Connect frontend to deployed backend API
+* Production environment configuration
+* Final end-to-end public access
+
 
 ---
 
@@ -200,8 +211,6 @@ HMSCC demonstrates:
 * Secure system-level orchestration
 * Web-based exposure of low-level tools
 * Strong separation of concerns
-
-> HMSCC is **viva-friendly, defensible, and portfolio-ready**.
 
 ---
 
