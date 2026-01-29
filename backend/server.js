@@ -9,7 +9,7 @@ const cors = require('cors');
 app.use(cors({
   origin: [
     'http://localhost:5173',
-    'https://hmscc-frontend.onrender.com', // adjust if frontend is deployed elsewhere
+    'https://hmscc.vercel.app/', // adjust if frontend is deployed elsewhere
   ],
   methods: ['POST', 'OPTIONS'],
   allowedHeaders: ['Content-Type'],
