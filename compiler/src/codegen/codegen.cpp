@@ -1,5 +1,25 @@
 #include "codegen/codegen.hpp"
 #include <sstream>
+#include <unordered_map>
+
+// Map HMSCC types and keywords to C
+static std::unordered_map<std::string, std::string> typeMapping = {
+    {"power", "int"},
+    {"flow", "float"},
+    {"note", "char"},
+    {"text", "char*"},
+    {"silent", "void"},
+    {"int", "int"},
+    {"string", "char*"},
+    {"float", "float"},
+    {"void", "void"},
+    {"char", "char"}
+};
+
+static std::string mapType(const std::string& type) {
+    auto it = typeMapping.find(type);
+    return (it != typeMapping.end()) ? it->second : type;
+}
 
 // Constructor
 CodeGenerator::CodeGenerator(
@@ -29,11 +49,8 @@ std::string CodeGenerator::genStmt(Stmt* stmt) {
     // Variable declaration
     if (auto decl = dynamic_cast<VarDeclStmt*>(stmt)) {
         std::stringstream ss;
-        if (decl->type == "string")
-            ss << "char* ";
-        else
-            ss << "int ";
-        ss << decl->name << " = " << genExpr(decl->init.get()) << ";\n";
+        std::string cType = mapType(decl->type);
+        ss << cType << " " << decl->name << " = " << genExpr(decl->init.get()) << ";\n";
         return ss.str();
     }
 
@@ -42,49 +59,51 @@ std::string CodeGenerator::genStmt(Stmt* stmt) {
         return assign->name + " = " + genExpr(assign->value.get()) + ";\n";
     }
 
-    // Print
+    // Print (handle both HMSCC 'speak' and standard 'print')
     if (auto print = dynamic_cast<PrintStmt*>(stmt)) {
         std::stringstream ss;
         std::string type = exprType(print->expr.get());
 
-        if (type == "string")
+        if (type == "string" || type == "char*")
             ss << "printf(\"%s\\n\", " << genExpr(print->expr.get()) << ");\n";
+        else if (type == "float")
+            ss << "printf(\"%f\\n\", " << genExpr(print->expr.get()) << ");\n";
         else
             ss << "printf(\"%d\\n\", " << genExpr(print->expr.get()) << ");\n";
 
         return ss.str();
     }
 
-    // IF STATEMENT  ✅ FIX
+    // IF STATEMENT (handle both 'think' and 'if')
     if (auto ifs = dynamic_cast<IfStmt*>(stmt)) {
         std::stringstream ss;
         ss << "if (" << genExpr(ifs->condition.get()) << ") {\n";
         for (auto& s : ifs->thenBlock->statements)
-            ss << "  " << genStmt(s.get());
-        ss << "}";
+            ss << "    " << genStmt(s.get());
+        ss << "  }";
 
         if (ifs->elseBlock) {
             ss << " else {\n";
             for (auto& s : ifs->elseBlock->statements)
-                ss << "  " << genStmt(s.get());
-            ss << "}";
+                ss << "    " << genStmt(s.get());
+            ss << "  }";
         }
 
         ss << "\n";
         return ss.str();
     }
 
-    // WHILE LOOP  ✅ FIX
+    // WHILE LOOP (handle both 'repeat' and 'while')
     if (auto loop = dynamic_cast<WhileStmt*>(stmt)) {
         std::stringstream ss;
         ss << "while (" << genExpr(loop->condition.get()) << ") {\n";
         for (auto& s : loop->body->statements)
-            ss << "  " << genStmt(s.get());
-        ss << "}\n";
+            ss << "    " << genStmt(s.get());
+        ss << "  }\n";
         return ss.str();
     }
 
-    // RETURN STATEMENT
+    // RETURN STATEMENT (handle both 'sendback' and 'return')
     if (auto ret = dynamic_cast<ReturnStmt*>(stmt)) {
         return "return " + genExpr(ret->value.get()) + ";\n";
     }
@@ -112,7 +131,7 @@ std::string CodeGenerator::genExpr(Expr* expr) {
                genExpr(bin->right.get()) + ")";
     }
 
-    // ✅ RELATIONAL EXPRESSIONS (THIS WAS MISSING)
+    // Relational expressions
     if (auto rel = dynamic_cast<RelationalExpr*>(expr)) {
         return "(" + genExpr(rel->left.get()) + " " +
                rel->op + " " +

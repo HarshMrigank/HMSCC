@@ -10,7 +10,7 @@ RUN apt-get update && apt-get install -y \
     g++ \
     && rm -rf /var/lib/apt/lists/*
 
-WORKDIR /compiler
+WORKDIR /app
 COPY compiler ./compiler
 
 RUN mkdir -p compiler/build && \
@@ -36,14 +36,15 @@ RUN apt-get update && apt-get install -y \
 WORKDIR /app
 
 # Copy compiler binary
-COPY --from=compiler /compiler/compiler/build/hmscc /app/hmscc
+COPY --from=compiler /app/compiler/build/hmscc /app/hmscc
 RUN chmod +x /app/hmscc
 
 # Copy backend
 COPY backend ./backend
 WORKDIR /app/backend
 
-RUN npm install
+RUN npm ci --only=production
 
-EXPOSE 3000
+EXPOSE 5001
+
 CMD ["node", "server.js"]

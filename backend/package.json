@@ -1,12 +1,14 @@
 {
-  "name": "backed",
+  "name": "hmscc-backend",
   "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
+  "description": "HMSCC Compiler Backend Service",
+  "main": "server.js",
   "scripts": {
+    "start": "node server.js",
+    "dev": "node server.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "keywords": [],
+  "keywords": ["hmscc", "compiler", "backend"],
   "author": "",
   "license": "ISC",
   "type": "commonjs",

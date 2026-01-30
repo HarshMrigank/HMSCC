@@ -1,0 +1,17 @@
+services:
+  - type: web
+    name: hmscc-backend
+    env: docker
+    dockerfilePath: ./dockerfile
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        value: 5001
+    healthCheckPath: /health
+    healthCheckProtocol: http
+    autoDeploy: true
+    disk:
+      name: compiler-cache
+      mountPath: /app/compiler
+      sizeGB: 2

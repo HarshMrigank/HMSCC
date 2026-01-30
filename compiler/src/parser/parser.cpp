@@ -25,9 +25,18 @@ bool Parser::match(TokenType type) {
 }
 
 std::unique_ptr<BlockStmt> Parser::parse() {
-    // Phase 6.2: parse `int main() { ... }`
-    match(TokenType::INT);
-    advance(); // main
+    // Support both `int main() { ... }` and `arena () { ... }`
+    bool isCpp = match(TokenType::INT);
+    bool isHMSCC = match(TokenType::ARENA);
+    
+    if (!isCpp && !isHMSCC) {
+        throw std::runtime_error("Program must start with 'int main()' or 'arena()'");
+    }
+    
+    if (isCpp) {
+        advance(); // main
+    }
+    
     match(TokenType::LPAREN);
     match(TokenType::RPAREN);
     return block();
@@ -44,11 +53,25 @@ std::unique_ptr<BlockStmt> Parser::block() {
 }
 
 std::unique_ptr<Stmt> Parser::statement() {
-    if (match(TokenType::PRINT)) return printStatement();
-    if (match(TokenType::IF)) return ifStatement();
-    if (match(TokenType::WHILE)) return whileStatement();
-    if (match(TokenType::RETURN)) return returnStatement();
-    if (match(TokenType::INT) || match(TokenType::STRING)) return declaration();
+    // HMSCC speak = print
+    if (match(TokenType::SPEAK) || match(TokenType::PRINT)) return printStatement();
+    
+    // HMSCC think = if
+    if (match(TokenType::THINK) || match(TokenType::IF)) return ifStatement();
+    
+    // HMSCC repeat = while
+    if (match(TokenType::REPEAT) || match(TokenType::WHILE)) return whileStatement();
+    
+    // HMSCC sendback = return
+    if (match(TokenType::SENDBACK) || match(TokenType::RETURN)) return returnStatement();
+    
+    // HMSCC types (power, flow, note, text) + standard (int, string)
+    if (match(TokenType::POWER) || match(TokenType::FLOW) || 
+        match(TokenType::NOTE) || match(TokenType::TEXT) || 
+        match(TokenType::INT) || match(TokenType::STRING)) {
+        return declaration();
+    }
+    
     if (check(TokenType::IDENTIFIER)) return assignment();
     throw std::runtime_error("Invalid statement");
 }

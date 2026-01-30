@@ -1,5 +1,29 @@
 #include "semantic/semantic.hpp"
 #include <stdexcept>
+#include <unordered_map>
+
+// Map HMSCC types to standard C types
+static std::unordered_map<std::string, std::string> typeMapping = {
+    {"power", "int"},
+    {"flow", "float"},
+    {"note", "char"},
+    {"text", "string"},
+    {"silent", "void"},
+    {"int", "int"},
+    {"string", "string"},
+    {"float", "float"},
+    {"void", "void"},
+    {"char", "char"}
+};
+
+// Normalize type from HMSCC or standard
+static std::string normalizeType(const std::string& type) {
+    auto it = typeMapping.find(type);
+    if (it != typeMapping.end()) {
+        return it->second;
+    }
+    return type;
+}
 
 // Entry point
 void SemanticAnalyzer::analyze(BlockStmt* program) {
@@ -19,14 +43,15 @@ void SemanticAnalyzer::analyzeStmt(Stmt* stmt) {
             );
         }
 
+        std::string normalizedType = normalizeType(decl->type);
         std::string exprType = analyzeExpr(decl->init.get());
-        if (exprType != decl->type) {
+        if (exprType != normalizedType) {
             throw std::runtime_error(
                 "Semantic error: Type mismatch in declaration of '" + decl->name + "'"
             );
         }
 
-        symbolTable[decl->name] = decl->type;
+        symbolTable[decl->name] = normalizedType;
         return;
     }
 

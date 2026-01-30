@@ -3,13 +3,47 @@
 #include <unordered_map>
 
 static std::unordered_map<std::string, TokenType> keywords = {
+    // Data Types - HMSCC
+    {"power", TokenType::POWER},
+    {"flow", TokenType::FLOW},
+    {"note", TokenType::NOTE},
+    {"text", TokenType::TEXT},
+    {"silent", TokenType::SILENT},
+
+    // Control Flow - HMSCC
+    {"think", TokenType::THINK},
+    {"otherwise", TokenType::OTHERWISE},
+    {"grind", TokenType::GRIND},
+    {"repeat", TokenType::REPEAT},
+    {"execute", TokenType::EXECUTE},
+    {"bail", TokenType::BAIL},
+    {"skip", TokenType::SKIP},
+    {"sendback", TokenType::SENDBACK},
+
+    // I/O - HMSCC
+    {"speak", TokenType::SPEAK},
+    {"listen", TokenType::LISTEN},
+
+    // Functions - HMSCC
+    {"arena", TokenType::ARENA},
+
+    // Modifiers - HMSCC
+    {"solid", TokenType::SOLID},
+    {"locked", TokenType::LOCKED},
+
+    // Literals - HMSCC
+    {"yes", TokenType::YES},
+    {"no", TokenType::NO},
+
+    // Standard (compatibility)
     {"int", TokenType::INT},
     {"string", TokenType::STRING},
     {"if", TokenType::IF},
     {"else", TokenType::ELSE},
     {"while", TokenType::WHILE},
     {"return", TokenType::RETURN},
-    {"print", TokenType::PRINT}
+    {"print", TokenType::PRINT},
+    {"for", TokenType::FOR}
 };
 
 Lexer::Lexer(const std::string& src)
